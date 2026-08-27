@@ -13,7 +13,7 @@
 const CONFIG = window.SUPABASE_CONFIG || {};
 const TABLE = "lista_compra";
 
-let supabase = null;
+let sb = null;
 let configOk = false;
 
 /** Comprueba que la config esté rellena (no con los placeholders). */
@@ -37,7 +37,7 @@ function libLoaded() {
 function initSupabase() {
   if (!libLoaded() || !configPresent()) return false;
   try {
-    supabase = window.supabase.createClient(CONFIG.url, CONFIG.anonKey);
+    sb = window.supabase.createClient(CONFIG.url, CONFIG.anonKey);
     return true;
   } catch (e) {
     console.error("No se pudo iniciar Supabase:", e);
@@ -119,7 +119,7 @@ $modalOverlay.addEventListener("click", (e) => {
 
 /** Busca un producto (por nombre normalizado) que no esté comprado. */
 async function findProduct(normalizedName) {
-  const { data, error } = await supabase
+  const { data, error } = await sb
     .from(TABLE)
     .select("*")
     .eq("producto", normalizedName)
@@ -130,7 +130,7 @@ async function findProduct(normalizedName) {
 }
 
 async function insertProduct(normalizedName, unidades) {
-  const { error } = await supabase.from(TABLE).insert({
+  const { error } = await sb.from(TABLE).insert({
     producto: normalizedName,
     unidades: unidades,
     comprado: false,
@@ -139,7 +139,7 @@ async function insertProduct(normalizedName, unidades) {
 }
 
 async function updateUnits(id, unidades) {
-  const { error } = await supabase
+  const { error } = await sb
     .from(TABLE)
     .update({ unidades: unidades })
     .eq("id", id);
@@ -147,19 +147,19 @@ async function updateUnits(id, unidades) {
 }
 
 async function deleteProduct(id) {
-  const { error } = await supabase.from(TABLE).delete().eq("id", id);
+  const { error } = await sb.from(TABLE).delete().eq("id", id);
   if (error) throw error;
 }
 
 async function deleteMany(ids) {
   if (!ids.length) return;
-  const { error } = await supabase.from(TABLE).delete().in("id", ids);
+  const { error } = await sb.from(TABLE).delete().in("id", ids);
   if (error) throw error;
 }
 
 /** Carga todos los productos pendientes (comprado = false). */
 async function fetchPending() {
-  const { data, error } = await supabase
+  const { data, error } = await sb
     .from(TABLE)
     .select("*")
     .eq("comprado", false)
