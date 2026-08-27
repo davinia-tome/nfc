@@ -16,14 +16,33 @@ const TABLE = "lista_compra";
 let supabase = null;
 let configOk = false;
 
-if (
-  CONFIG.url &&
-  CONFIG.anonKey &&
-  !CONFIG.url.includes("TU_PROYECTO") &&
-  !CONFIG.anonKey.includes("TU_ANON_KEY")
-) {
-  supabase = window.supabase.createClient(CONFIG.url, CONFIG.anonKey);
-  configOk = true;
+/** Comprueba que la config esté rellena (no con los placeholders). */
+function configPresent() {
+  return (
+    CONFIG.url &&
+    CONFIG.anonKey &&
+    !CONFIG.url.includes("TU_PROYECTO") &&
+    !CONFIG.anonKey.includes("TU_ANON_KEY")
+  );
+}
+
+/** ¿Se cargó la librería supabase-js (CDN)? */
+function libLoaded() {
+  return !!(
+    window.supabase && typeof window.supabase.createClient === "function"
+  );
+}
+
+/** Inicializa el cliente de Supabase de forma segura (sin romper el script). */
+function initSupabase() {
+  if (!libLoaded() || !configPresent()) return false;
+  try {
+    supabase = window.supabase.createClient(CONFIG.url, CONFIG.anonKey);
+    return true;
+  } catch (e) {
+    console.error("No se pudo iniciar Supabase:", e);
+    return false;
+  }
 }
 
 /* ---------------------------------------------------------
@@ -523,10 +542,28 @@ function renderConfigError() {
     </div>`;
 }
 
+function renderLibError() {
+  $viewRoot.innerHTML = `
+    <div class="empty-state">
+      <span class="emoji">📡</span>
+      <h2>No se pudo cargar la app</h2>
+      <p class="muted">No se ha podido descargar la librería de Supabase.
+      Suele deberse a la conexión, a un bloqueador de anuncios o a una red que
+      bloquea <code>cdn.jsdelivr.net</code>. Prueba con otra red (p. ej. datos
+      móviles) o desactiva el bloqueador para este sitio.</p>
+      <button class="btn btn-primary" style="margin-top:16px;" onclick="location.reload()">Reintentar</button>
+    </div>`;
+}
+
 /* ---------------------------------------------------------
    8. Arranque de la aplicación
    --------------------------------------------------------- */
 function main() {
+  if (!libLoaded()) {
+    renderLibError();
+    return;
+  }
+  configOk = initSupabase();
   if (!configOk) {
     renderConfigError();
     return;
