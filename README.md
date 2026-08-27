@@ -198,6 +198,21 @@ https://<usuario>.github.io/nfc/lista-compra/?item=papel%20higienico
 > Para nombres con espacios, usa `%20` (ej. `?item=papel%20higienico`).
 > Los acentos se normalizan automáticamente al buscar en la base de datos.
 
+**Etiqueta "Otros" (añadir por voz)** — para productos poco habituales:
+
+```
+https://<usuario>.github.io/nfc/lista-compra/?item=otros
+```
+
+Al escanearla, en lugar de un producto fijo, la app pregunta *"¿Qué producto
+quieres añadir?"* y permite dictarlo **por voz** (o escribirlo). Después pide las
+unidades como con cualquier otro producto. Palabras reservadas para esta pegatina:
+`otros`, `otro`, `varios`.
+
+> El dictado por voz usa la Web Speech API del navegador: funciona en Chrome y en
+> Android sobre HTTPS (requiere dar permiso de micrófono). En iOS/Safari el soporte
+> es limitado, por eso siempre hay un campo de texto como alternativa.
+
 ---
 
 ## 🔄 Cómo funciona la app

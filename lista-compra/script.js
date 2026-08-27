@@ -164,6 +164,11 @@ async function renderItemFlow(rawItem) {
       <p class="muted">Comprobando la lista…</p>
     </div>`;
 
+  await processProduct(normalized, nice);
+}
+
+/** Consulta si el producto existe y muestra el modal adecuado (añadir o gestionar). */
+async function processProduct(normalized, nice) {
   showLoading(true);
   try {
     const existing = await findProduct(normalized);
@@ -179,6 +184,119 @@ async function renderItemFlow(rawItem) {
     toast("Error al consultar la lista", "error");
     renderErrorCard();
   }
+}
+
+/* ---------------------------------------------------------
+   5b. Vista "Otros" — añadir un producto por voz
+   La pegatina de "otros" usa una URL reservada (?item=otros).
+   En lugar de tratar "otros" como un producto, pide el nombre
+   por voz (o texto) y luego reutiliza el flujo normal de unidades.
+   --------------------------------------------------------- */
+const VOICE_KEYWORDS = ["otros", "otro", "varios"];
+
+function renderVoiceFlow() {
+  $floating.classList.add("hidden");
+  $viewRoot.innerHTML = `
+    <div class="card">
+      <p class="muted">Añadir otro producto</p>
+      <h2 class="section-title">🎤 Dime qué quieres añadir</h2>
+    </div>`;
+
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+  const supported = !!SpeechRecognition;
+
+  openModal(`
+    <h2>¿Qué producto quieres añadir?</h2>
+    <p class="muted">${
+      supported
+        ? "Pulsa el micrófono y dilo en voz alta, o escríbelo."
+        : "Tu navegador no permite dictado por voz. Escribe el producto."
+    }</p>
+    ${
+      supported
+        ? `<div style="display:flex;justify-content:center;margin:18px 0;">
+             <button class="mic-btn" id="mic" aria-label="Hablar">🎤</button>
+           </div>
+           <p class="mic-status muted" id="mic-status">Toca el micrófono para hablar</p>`
+        : ""
+    }
+    <input type="text" class="text-input" id="voice-input"
+           placeholder="Ej.: aceite de oliva" autocomplete="off" autocapitalize="none" />
+    <div class="btn-row" style="margin-top:16px;">
+      <button class="btn btn-secondary" id="cancel">Cancelar</button>
+      <button class="btn btn-primary" id="continue">Continuar</button>
+    </div>
+  `);
+
+  const $input = document.getElementById("voice-input");
+  document.getElementById("cancel").onclick = goToOverview;
+  document.getElementById("continue").onclick = () => {
+    const name = ($input.value || "").trim();
+    if (!name) {
+      toast("Dime o escribe un producto", "info");
+      return;
+    }
+    // Reutiliza el flujo estándar: comprueba duplicados y pide unidades.
+    processProduct(normalize(name), displayName(name));
+  };
+  // Permite confirmar con Enter desde el teclado.
+  $input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") document.getElementById("continue").click();
+  });
+
+  if (!supported) return;
+
+  const $mic = document.getElementById("mic");
+  const $status = document.getElementById("mic-status");
+  const recog = new SpeechRecognition();
+  recog.lang = "es-ES";
+  recog.interimResults = true;
+  recog.maxAlternatives = 1;
+  let listening = false;
+
+  $mic.onclick = () => {
+    if (listening) {
+      recog.stop();
+      return;
+    }
+    try {
+      recog.start();
+    } catch (_) {
+      /* start() lanza si ya está activo; se ignora */
+    }
+  };
+
+  recog.onstart = () => {
+    listening = true;
+    $mic.classList.add("listening");
+    $status.textContent = "Escuchando…";
+  };
+  recog.onerror = (e) => {
+    $status.textContent =
+      e.error === "not-allowed" || e.error === "service-not-allowed"
+        ? "Permiso de micrófono denegado"
+        : "No te he entendido, prueba otra vez";
+  };
+  recog.onend = () => {
+    listening = false;
+    $mic.classList.remove("listening");
+    if ($status.textContent === "Escuchando…") {
+      $status.textContent = "Toca el micrófono para hablar";
+    }
+  };
+  recog.onresult = (event) => {
+    let transcript = "";
+    for (let i = 0; i < event.results.length; i++) {
+      transcript += event.results[i][0].transcript;
+    }
+    transcript = transcript.trim();
+    $input.value = transcript;
+    const isFinal = event.results[event.results.length - 1].isFinal;
+    $status.textContent = isFinal
+      ? `He entendido: "${transcript}"`
+      : `… ${transcript}`;
+  };
 }
 
 /** Modal: el producto NO existe → añadir con selector de unidades. */
@@ -414,7 +532,9 @@ function main() {
     return;
   }
   const item = getItemParam();
-  if (item) {
+  if (item && VOICE_KEYWORDS.includes(normalize(item))) {
+    renderVoiceFlow();
+  } else if (item) {
     renderItemFlow(item);
   } else {
     renderOverview();
