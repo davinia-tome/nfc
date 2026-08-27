@@ -215,6 +215,87 @@ unidades como con cualquier otro producto. Palabras reservadas para esta pegatin
 
 ---
 
+## 📇 Catálogo de pegatinas (URLs listas para copiar)
+
+URLs reales para el repo `davinia-tome/nfc`. Copia la que quieras y grábala en
+la etiqueta NFC correspondiente.
+
+**Especiales**
+
+| Pegatina | URL |
+|----------|-----|
+| 🗒️ Ver la lista completa | `https://davinia-tome.github.io/nfc/lista-compra/` |
+| 🎤 Otros (añadir por voz) | `https://davinia-tome.github.io/nfc/lista-compra/?item=otros` |
+
+**Lácteos y huevos**
+
+| Producto | URL |
+|----------|-----|
+| Leche | `https://davinia-tome.github.io/nfc/lista-compra/?item=leche` |
+| Huevos | `https://davinia-tome.github.io/nfc/lista-compra/?item=huevos` |
+| Yogur | `https://davinia-tome.github.io/nfc/lista-compra/?item=yogur` |
+| Queso | `https://davinia-tome.github.io/nfc/lista-compra/?item=queso` |
+| Mantequilla | `https://davinia-tome.github.io/nfc/lista-compra/?item=mantequilla` |
+
+**Panadería y desayuno**
+
+| Producto | URL |
+|----------|-----|
+| Pan | `https://davinia-tome.github.io/nfc/lista-compra/?item=pan` |
+| Café | `https://davinia-tome.github.io/nfc/lista-compra/?item=cafe` |
+| Cereales | `https://davinia-tome.github.io/nfc/lista-compra/?item=cereales` |
+| Galletas | `https://davinia-tome.github.io/nfc/lista-compra/?item=galletas` |
+| Mermelada | `https://davinia-tome.github.io/nfc/lista-compra/?item=mermelada` |
+
+**Fruta y verdura**
+
+| Producto | URL |
+|----------|-----|
+| Plátanos | `https://davinia-tome.github.io/nfc/lista-compra/?item=platanos` |
+| Manzanas | `https://davinia-tome.github.io/nfc/lista-compra/?item=manzanas` |
+| Tomates | `https://davinia-tome.github.io/nfc/lista-compra/?item=tomates` |
+| Patatas | `https://davinia-tome.github.io/nfc/lista-compra/?item=patatas` |
+| Cebollas | `https://davinia-tome.github.io/nfc/lista-compra/?item=cebollas` |
+| Lechuga | `https://davinia-tome.github.io/nfc/lista-compra/?item=lechuga` |
+
+**Despensa**
+
+| Producto | URL |
+|----------|-----|
+| Pasta | `https://davinia-tome.github.io/nfc/lista-compra/?item=pasta` |
+| Arroz | `https://davinia-tome.github.io/nfc/lista-compra/?item=arroz` |
+| Aceite de oliva | `https://davinia-tome.github.io/nfc/lista-compra/?item=aceite%20de%20oliva` |
+| Sal | `https://davinia-tome.github.io/nfc/lista-compra/?item=sal` |
+| Azúcar | `https://davinia-tome.github.io/nfc/lista-compra/?item=azucar` |
+| Harina | `https://davinia-tome.github.io/nfc/lista-compra/?item=harina` |
+
+**Bebidas**
+
+| Producto | URL |
+|----------|-----|
+| Agua | `https://davinia-tome.github.io/nfc/lista-compra/?item=agua` |
+| Zumo | `https://davinia-tome.github.io/nfc/lista-compra/?item=zumo` |
+| Cerveza | `https://davinia-tome.github.io/nfc/lista-compra/?item=cerveza` |
+| Refrescos | `https://davinia-tome.github.io/nfc/lista-compra/?item=refrescos` |
+
+**Limpieza e higiene**
+
+| Producto | URL |
+|----------|-----|
+| Papel higiénico | `https://davinia-tome.github.io/nfc/lista-compra/?item=papel%20higienico` |
+| Detergente | `https://davinia-tome.github.io/nfc/lista-compra/?item=detergente` |
+| Lavavajillas | `https://davinia-tome.github.io/nfc/lista-compra/?item=lavavajillas` |
+| Champú | `https://davinia-tome.github.io/nfc/lista-compra/?item=champu` |
+| Pasta de dientes | `https://davinia-tome.github.io/nfc/lista-compra/?item=pasta%20de%20dientes` |
+
+> **Cómo crear tus propias pegatinas:** cambia el valor de `?item=` por lo que
+> quieras (`?item=loquesea`). No hace falta darlo de alta en ningún sitio; la app
+> lo gestiona sola. Usa `%20` para los espacios (ej. `aceite%20de%20oliva`) y
+> escribe los acentos como letras normales (`cafe`, `azucar`): la app los
+> normaliza igualmente al guardar y buscar.
+
+---
+
 ## 🔄 Cómo funciona la app
 
 ### Al escanear una etiqueta de producto (`?item=leche`)
