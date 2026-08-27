@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#2e7d32" />
+  <title>Lista de la Compra</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Cliente oficial de Supabase (v2) desde CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <header class="app-header">
+    <h1 class="app-title">🛒 Lista de la Compra</h1>
+  </header>
+
+  <main id="main" class="app-main">
+    <!-- El contenido se renderiza dinámicamente desde script.js -->
+    <div id="view-root"></div>
+  </main>
+
+  <!-- Contenedor de acción principal (botón flotante "Compra Hecha") -->
+  <div id="floating-actions" class="floating-actions hidden">
+    <button id="btn-compra-hecha" class="btn btn-primary btn-lg">
+      ✅ Compra Hecha
+    </button>
+  </div>
+
+  <!-- Modal genérico reutilizable -->
+  <div id="modal-overlay" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal" id="modal-box">
+      <!-- Contenido inyectado dinámicamente -->
+    </div>
+  </div>
+
+  <!-- Contenedor de notificaciones toast -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- Overlay de carga global -->
+  <div id="loading-overlay" class="loading-overlay hidden">
+    <div class="spinner" aria-label="Cargando"></div>
+  </div>
+
+  <!-- Configuración de Supabase.
+       Rellena estos valores con los de tu proyecto (Settings > API).
+       La 'anon key' es pública por diseño: DEBES proteger la tabla con
+       políticas de Row Level Security (ver README.md). -->
+  <script>
+    window.SUPABASE_CONFIG = {
+      url: "https://TU_PROYECTO.supabase.co",
+      anonKey: "TU_ANON_KEY_PUBLICA"
+    };
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

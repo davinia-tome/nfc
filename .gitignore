@@ -1,0 +1,15 @@
+# Dependencias
+node_modules/
+scripts/node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Variables de entorno locales (NUNCA subir claves)
+.env
+.env.*
+
+# Sistema
+.DS_Store
+Thumbs.db

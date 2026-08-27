@@ -1,0 +1,13 @@
+{
+  "name": "lista-compra-recordatorios",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Script de recordatorios por email para la lista de la compra NFC",
+  "main": "recordatorios.js",
+  "scripts": {
+    "start": "node recordatorios.js"
+  },
+  "dependencies": {
+    "nodemailer": "6.9.14"
+  }
+}

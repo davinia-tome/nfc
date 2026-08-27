@@ -1,0 +1,39 @@
+name: Recordatorios lista de la compra
+
+# Envía un email recordatorio de los productos que llevan
+# demasiados días pendientes en la lista.
+on:
+  schedule:
+    # Todos los días a las 09:00 UTC (cron en UTC).
+    - cron: "0 9 * * *"
+  # Permite lanzarlo manualmente desde la pestaña Actions.
+  workflow_dispatch:
+
+jobs:
+  enviar-recordatorio:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Instalar dependencias
+        working-directory: scripts
+        run: npm install
+
+      - name: Ejecutar script de recordatorios
+        working-directory: scripts
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          MAIL_TO: ${{ secrets.MAIL_TO }}
+          DIAS_ANTIGUEDAD: "5"
+        run: node recordatorios.js
